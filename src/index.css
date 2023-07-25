@@ -1,0 +1,33 @@
+.demo-logo-vertical {
+    height: 32px;
+    margin: 16px;
+    /* background: rgba(255,255,255,.2); */
+    background: #383f52;
+    border-radius: 6px;
+}
+
+.ant-menu, 
+.ant-layout-sider-children,
+.ant-menu-item{
+    background-color: #383f52;
+}
+
+.ant-menu .ant-menu-item-selected{
+    background-color: #dd3545;
+}
+
+.ant-menu-title-content a {
+    text-decoration: none;
+}
+
+a.ant-dropdown-trigger{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.ant-layout-header{
+    padding: 16px;
+    background: rgb(255, 255, 255);
+    border-bottom: 1px solid lightgray;
+}
