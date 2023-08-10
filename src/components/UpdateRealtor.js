@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { ConfigProvider, Layout, theme, Form, Input, Button, Space, Upload, message, Progress, Modal } from "antd";
+
 import Navbar from "./navbar";
 import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { PlusOutlined } from "@ant-design/icons";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
+
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = React.useState(false);
@@ -121,8 +123,6 @@ export default function UpdateRealtor() {
     setData(newData);
   }
 
-  const navigate = useNavigate();
-
   const normFile = (e) => {
     if (Array.isArray(e)) {
       return e;
@@ -204,7 +204,6 @@ export default function UpdateRealtor() {
           });
         }, 500);
         setTimeout(function() { window.location = "/realtor"; }, 1000);
-        // navigate("/realtor");
       })
       .catch((err) => {
         console.log(err);

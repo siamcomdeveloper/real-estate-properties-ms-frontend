@@ -12,7 +12,7 @@ import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 
 import moment from "moment";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = React.useState(false);
@@ -355,9 +355,6 @@ export default function CreateProperty(){
                         label="Status"
                         rules={[{ required: true }]}
                         style={{width:'200px'}}
-                        // initialValues={{
-                        //   ["name"]: settingsRedux.background_image 
-                        // }}
                       >
                         <Select
                           id="status"

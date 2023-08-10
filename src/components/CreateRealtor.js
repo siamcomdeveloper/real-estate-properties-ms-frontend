@@ -5,13 +5,11 @@ import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 
-import { PlusOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = React.useState(false);
@@ -60,8 +58,6 @@ export default function CreateRealtor() {
     commission_amount: "",
   });
 
-  const navigate = useNavigate();
-
   function handle(e) {
     const newData = { ...data };
     newData[e.target.id] = e.target.value;
@@ -78,7 +74,7 @@ export default function CreateRealtor() {
     });
 
     axios
-      .post("http://localhost:5000/realtors/addNew", {
+      .post(`${process.env.REACT_APP_API_URL}/realtors/addNew`, {
         imgUrl: data.imgUrl,
         name: data.name,
         email: data.email,
@@ -97,7 +93,6 @@ export default function CreateRealtor() {
           });
         }, 500);
         setTimeout(function() { window.location = "/realtor"; }, 1000);
-        // navigate("/realtor");
       })
       .catch((err) => {
         console.log(err);

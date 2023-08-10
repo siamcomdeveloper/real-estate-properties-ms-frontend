@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ConfigProvider, Layout, theme, Button, Dropdown, Table, Tag, Menu, message, Modal } from "antd";
+import { ConfigProvider, Layout, theme, Dropdown, Table, Tag, message, Modal } from "antd";
+
 import Navbar from "./navbar";
 import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+
 const { confirm } = Modal;
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 export default function SimpleTodosList() {
   useEffect(()  => { document.body.classList.remove('login-style'); });
@@ -29,7 +32,6 @@ export default function SimpleTodosList() {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const hasSelected = selectedRowKeys.length > 0;
 
   useEffect(() => {
     axios

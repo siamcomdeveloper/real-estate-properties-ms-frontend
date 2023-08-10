@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ConfigProvider, Layout, theme, message } from "antd";
+import { ConfigProvider, Layout, theme } from "antd";
 import Navbar from "./navbar";
 
 import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const Todo = (props) => (
   <tr className="d-flex">
@@ -36,8 +36,6 @@ const Todo = (props) => (
 
 export default function SimpleTodosList() {
   useEffect(()  => { document.body.classList.remove('login-style'); });
-
-  const [messageApi, contextHolder] = message.useMessage();
   
   const [countActive, setCountActive] = useState(0);
   const [countPending, setCountPending] = useState(0);
@@ -102,10 +100,6 @@ export default function SimpleTodosList() {
       });
   }, []);
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
   const customAntdStyle = { 
     token: 
     { 
@@ -115,7 +109,6 @@ export default function SimpleTodosList() {
   
   return (
     <ConfigProvider theme={customAntdStyle}>
-      {contextHolder}
       <Layout>
       <Sider
         breakpoint="lg"

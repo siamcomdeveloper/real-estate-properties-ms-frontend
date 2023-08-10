@@ -3,20 +3,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { ConfigProvider, Layout, Button, Card, Tag, Col, Row, message, Modal } from "antd";
+import { ConfigProvider, Layout, Card, Tag, Col, Row, message, Modal } from "antd";
 
 import Navbar from "./navbar";
 import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { right } from "@popperjs/core";
 
 const { confirm } = Modal;
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
-import propertyImage from '../img/property.jpg';
 import profileImage from '../img/undraw_profile.svg';
 
 export default function PropertyList() {
@@ -88,50 +87,6 @@ export default function PropertyList() {
         console.log('Cancel');
       },
     });
-  };
-
-  const handleUpdate = (e) => {
-
-    e.preventDefault();
-    // console.log('in');
-    // console.log(e.target);
-    const anchor = event.target.closest("a");
-    if (!anchor) return; // Not found. Exit here.
-    // console.log(anchor.getAttribute('rel'));
-    const id = anchor.getAttribute('rel');
-    // console.log(id);
-
-    messageApi.open({
-      id,
-      type: 'removing',
-      content: 'Removing...',
-      duration: 0.5
-    });
-    
-    axios
-      .delete(`${process.env.REACT_APP_API_URL}/property/delete/${id}`)
-      .then((result) => {
-        // console.log(result);
-        setTimeout(() => {
-          messageApi.open({
-            id,
-            type: 'success',
-            content: 'Removed!',
-            duration: 1,
-          });
-        }, 500);
-        setTimeout(function() { window.location = "/property"; }, 1000);
-      })
-      .catch((err) => {
-        console.log(err);
-        setTimeout(() => {
-          messageApi.open({
-            type: 'error',
-            content: 'Error!',
-            duration: 2,
-          });
-        }, 500);
-      });
   };
   
   const PropertyCard = (props) => (

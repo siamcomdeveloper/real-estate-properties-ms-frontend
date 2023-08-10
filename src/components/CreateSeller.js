@@ -1,30 +1,17 @@
 import React, { useState, useEffect } from "react";
-import {
-  Layout,
-  theme,
-  Form,
-  Input,
-  Button,
-  Space,
-  Upload,
-  DatePicker,
-  ConfigProvider,
-  message,
-  Progress
-} from "antd";
-import Navbar from "./navbar";
+import { Layout, theme, Form, Input, Button, Space, Upload, DatePicker, ConfigProvider, message, Progress } from "antd";
 
+import Navbar from "./navbar";
 import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
 
-import { PlusOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = React.useState(false);
@@ -66,52 +53,6 @@ export default function CreateSeller() {
     propertyId: "",
     status: "",
   });
-
-  const navigate = useNavigate();
-  // key: crypto.randomUUID(),
-
-  // const [defaultFileList, setDefaultFileList] = useState([]);
-  // const [progress, setProgress] = useState(0);
-  // const uploadImage = async (options) => {
-  //   const { onSuccess, onError, file, onProgress } = options;
-
-  //   let formData = new FormData();
-  //   formData.append("file", file);
-  //   formData.append("domain", "POST");
-  //   formData.append("filename", file.name);
-
-  //   console.log(formData);
-
-  //   const config = {
-  //     headers: { "content-type": "application/json" },
-  //     onUploadProgress: (event) => {
-  //       const percent = Math.floor((event.loaded / event.total) * 100);
-  //       setProgress(percent);
-  //       if (percent === 100) {
-  //         setTimeout(() => setProgress(0), 1000);
-  //       }
-  //       onProgress({ percent: (event.loaded / event.total) * 100 });
-  //     },
-  //   };
-
-  //   try {
-  //     const res = await axios.post(
-  //       `${process.env.REACT_APP_API_URL}/upload`,
-  //       formData,
-  //       config
-  //     );
-  //     onSuccess("Ok");
-  //     console.log("server res: ", res);
-  //   } catch (err) {
-  //     console.log("Eroor: ", err);
-  //     const error = new Error("Some error");
-  //     onError({ err });
-  //   }
-  // };
-
-  // const handleOnChange = ({ file, fileList, event }) => {
-  //   setDefaultFileList(fileList);
-  // };
 
   function handle(e) {
     const newData = { ...data };
@@ -158,7 +99,6 @@ export default function CreateSeller() {
           });
         }, 500);
         setTimeout(function() { window.location = "/seller"; }, 1000);
-        // navigate("/seller");
       })
       .catch((err) => {
         console.log(err);

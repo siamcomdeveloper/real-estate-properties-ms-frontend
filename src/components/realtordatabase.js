@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { ConfigProvider, Layout, theme, Button, Table, Dropdown, message, Modal } from "antd";
+
+import { ConfigProvider, Layout, theme, Table, Dropdown, message, Modal } from "antd";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import Navbar from "./navbar";
 
@@ -9,10 +9,10 @@ import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 
 const { confirm } = Modal;
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 export default function RealtorDatabase() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -26,14 +26,12 @@ export default function RealtorDatabase() {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const hasSelected = selectedRowKeys.length > 0;
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   const [data, setData] = useState([]);
-  let navigate = useNavigate();
 
   useEffect(() => {
     axios

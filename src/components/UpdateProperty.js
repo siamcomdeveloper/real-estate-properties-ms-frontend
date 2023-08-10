@@ -11,13 +11,10 @@ import Navbar from './navbar';
 import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
 
-import { PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 
-import moment from "moment";
-
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = React.useState(false);
@@ -273,10 +270,6 @@ export default function UpdateProperty(){
     }
   };
 
-  // const handleOnChange = ({ file, fileList, event }) => {
-  //   setDefaultFileList(fileList);
-  // };
-
   const dateFormat = 'YYYY-MM-DD';
 
   const customAntdStyle = { 
@@ -454,13 +447,9 @@ export default function UpdateProperty(){
                         label="Status"
                         rules={[{ required: true }]}
                         style={{width:'200px'}}
-                        // initialValues={{
-                        //   ["name"]: settingsRedux.background_image 
-                        // }}
                       >
                         <Select
                           id="status"
-                          // defaultValue="2"
                           style={{ width: 120 }}
                           options={[{ value: '1', label: 'Active' },
                                     { value: '2', label: 'Pending' },

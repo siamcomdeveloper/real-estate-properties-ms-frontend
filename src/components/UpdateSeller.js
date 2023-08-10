@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { ConfigProvider, Layout, theme, Form, Input, Button, Space, Upload, message, Progress, Modal } from "antd";
+
 import Navbar from "./navbar";
 import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { PlusOutlined } from "@ant-design/icons";
-import moment from "moment";
-import { useNavigate, useParams } from "react-router-dom";
-import axios, { Axios } from "axios";
 
-const { Header, Content, Footer, Sider } = Layout;
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
+
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
+const { Content, Footer, Sider } = Layout;
 
 const SubmitButton = ({ form }) => {
   const [submittable, setSubmittable] = React.useState(false);
@@ -108,8 +109,6 @@ export default function UpdateSeller() {
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
-  const navigate = useNavigate();
-
   function handleInputOnChange(e) {
     const newData = { ...data };
     newData[e.target.id] = e.target.value;
@@ -191,7 +190,6 @@ export default function UpdateSeller() {
           });
         }, 500);
         setTimeout(function() { window.location = "/seller"; }, 1000);
-        // navigate("/seller");
       })
       .catch((err) => {
         console.log(err);
