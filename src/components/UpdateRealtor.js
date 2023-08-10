@@ -67,7 +67,7 @@ export default function UpdateRealtor() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/realtors/" + id)
+      .get(`${process.env.REACT_APP_API_URL}/realtors/` + id)
       .then((response) => {
         setData((prevData) => ({
           ...prevData,
@@ -185,7 +185,7 @@ export default function UpdateRealtor() {
     });
 
     axios
-      .patch("http://localhost:5000/realtors/update/" + id, {
+      .patch(`${process.env.REACT_APP_API_URL}/realtors/update/` + id, {
         imgUrl: data.imgUrl,
         name: data.name,
         email: data.email,

@@ -62,7 +62,7 @@ export default function UpdateSeller() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/sellers/" + id)
+      .get(`${process.env.REACT_APP_API_URL}/sellers/` + id)
       .then((response) => {
         setData((prevData) => ({
           ...prevData,
@@ -172,7 +172,7 @@ export default function UpdateSeller() {
 
   function submit() {
     axios
-      .patch("http://localhost:5000/sellers/update/" + id, {
+      .patch(`${process.env.REACT_APP_API_URL}/sellers/update/` + id, {
         imgUrl: data.imgUrl,
         name: data.name,
         // commenceDate: data.commenceDate,

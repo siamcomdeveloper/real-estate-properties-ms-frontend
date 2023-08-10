@@ -33,7 +33,7 @@ export default function SimpleTodosList() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/sellers/")
+      .get(`${process.env.REACT_APP_API_URL}/sellers/`)
       .then((response) => {
         const data = [];
         let options = { year: "numeric", month: "long", day: "numeric" };
@@ -73,7 +73,7 @@ export default function SimpleTodosList() {
         });
         
         axios
-          .delete("http://localhost:5000/sellers/delete/" + id)
+          .delete(`${process.env.REACT_APP_API_URL}/sellers/delete/` + id)
           .then((result) => {
             console.log(result);
             setTimeout(() => {

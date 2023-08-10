@@ -139,7 +139,7 @@ export default function CreateSeller() {
     });
 
     axios
-      .post("http://localhost:5000/sellers/addNew", {
+      .post(`${process.env.REACT_APP_API_URL}/sellers/addNew`, {
         imgUrl: data.imgUrl,
         name: data.name,
         commenceDate: data.commenceDate,

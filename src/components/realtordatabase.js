@@ -37,7 +37,7 @@ export default function RealtorDatabase() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/realtors/")
+      .get(`${process.env.REACT_APP_API_URL}/realtors/`)
       .then((response) => {
         const data = [];
         for (let i = 0; i < response.data.length; ++i) {
@@ -74,7 +74,7 @@ export default function RealtorDatabase() {
         });
         
         axios
-          .delete("http://localhost:5000/realtors/delete/" + id)
+          .delete(`${process.env.REACT_APP_API_URL}/realtors/delete/` + id)
           .then((result) => {
             console.log(result);
             setTimeout(() => {
