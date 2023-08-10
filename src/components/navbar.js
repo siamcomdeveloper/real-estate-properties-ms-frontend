@@ -7,7 +7,7 @@ import { Menu } from 'antd';
 const items = [
   {
       key: 'properties',
-      label: <Link to='/'>Properties</Link>,
+      label: <Link to='/property'>Properties</Link>,
       icon: <HomeOutlined />,
   },
   {
@@ -36,46 +36,5 @@ export default function Navbar(props){
           defaultSelectedKeys={props.defaultSelectedKeys}
           items={items}
         />
-    // <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-    //       <Menu.Item key="1">
-    //         <HomeOutlined />
-    //           <span>Properties</span>
-    //           <Link to="/" />
-    //       </Menu.Item>
-    //       <Menu.Item key="2">
-    //           <UserOutlined/>
-    //           <span>Seller Database</span>
-    //           <Link to="/create" />
-    //       </Menu.Item>
-    //       <Menu.Item key="3">
-    //           <TeamOutlined />
-    //           <span>Realtor Database</span>
-    //           <Link to="/create" />
-    //       </Menu.Item>
-    //       <Menu.Item key="4">
-    //           <LineChartOutlined />
-    //           <span>Report</span>
-    //           <Link to="/report" />
-    //       </Menu.Item>
-    //   </Menu>
-    // <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
-    //   <Link to="/" className="navbar-brand">
-    //     Todo List Maker
-    //   </Link>{' '}
-    //   <div className="collpase navbar-collapse">
-    //     <ul className="navbar-nav mr-auto">
-    //       <li className="navbar-item">
-    //         <Link to="/" className="nav-link">
-    //           Tasks
-    //         </Link>
-    //       </li>
-    //       <li className="navbar-item">
-    //         <Link to="/create" className="nav-link">
-    //           Add A Task
-    //         </Link>
-    //       </li>
-    //     </ul>
-    //   </div>
-    // </nav>
   );
 }

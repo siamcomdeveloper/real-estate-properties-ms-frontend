@@ -1,9 +1,19 @@
-.demo-logo-vertical {
-    height: 32px;
+.sidebar-brand {
     margin: 16px;
-    /* background: rgba(255,255,255,.2); */
-    background: #383f52;
-    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .05rem;
+}
+
+.sidebar-brand .sidebar-brand-icon i {
+    font-size: 2rem
+}
+
+.sidebar-brand .sidebar-brand-text {
+    display: inline;
+    margin-left: 0.5rem!important;
+    color: white !important;
 }
 
 .ant-menu, 
@@ -17,7 +27,7 @@
 }
 
 .ant-menu-title-content a {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 a.ant-dropdown-trigger{
@@ -30,4 +40,126 @@ a.ant-dropdown-trigger{
     padding: 16px;
     background: rgb(255, 255, 255);
     border-bottom: 1px solid lightgray;
+}
+
+.custom-card-style .ant-card-body{
+    width: 300px;
+    padding: 0;
+    color: #5a5c69;
+}
+
+.custom-card-style{
+    margin-bottom: 20px;
+}
+
+/* Login Page Style */
+@import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body.login-style {
+    font-family: 'Muli', sans-serif;
+    background-color: #383f52 !important;
+    color: #dd3545 !important;
+    margin: 0 !important;
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh !important;
+    overflow: hidden;
+}
+
+.login-style section {
+    width: 100%;
+    max-width: 420px;
+    min-height: 400px;
+    display: flex !important;;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1rem;
+    background-color: #2a2d36;
+}
+
+.login-style form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    padding-bottom: 1rem;
+}
+
+.login-style a, .login-style a:visited {
+    color: #fff;
+}
+
+.login-style input[type="text"],
+.login-style input[type="password"],
+.login-style button,
+.login-style textarea {
+  font-family: 'Muli', sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+.login-style label,
+.login-style button {
+  margin-top: 1rem;
+}
+
+.login-style button {
+  padding: 0.5rem;
+  background-color: #dd3545;
+}
+
+.login-style .instructions {
+    font-size: 0.75rem;
+    border-radius: 0.5rem;
+    background: #000;
+    color: #fff;
+    padding: 0.25rem;
+    position: relative;
+    bottom: -10px;
+}
+
+.login-style .instructions > svg {
+    margin-right: 0.25rem;
+}
+
+.login-style .offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
+.login-style .hide {
+    display: none;
+}
+
+.login-style .valid {
+    color: limegreen;
+    margin-left: 0.25rem;
+}
+
+.login-style .invalid {
+    color: red;
+    margin-left: 0.25rem;
+}
+
+.login-style .errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-style .line {
+    display: inline-block;
+}
+
+.login-style code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

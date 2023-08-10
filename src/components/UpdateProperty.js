@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 
 import axios from "axios";
-import { ConfigProvider, Layout, theme, Form, Input, Button, Space, Upload, DatePicker, Progress, message, Select } from 'antd';
+
+import dayjs from 'dayjs';
+
+import { ConfigProvider, Layout, theme, Form, Input, Button, Space, Upload, DatePicker, Progress, message, Select, Modal } from 'antd';
 
 import Navbar from './navbar';
 import SidebarBrand from './sidebarbrand';
 import Topbar from './topbar';
 
+import { PlusOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 
@@ -19,7 +24,7 @@ const SubmitButton = ({ form }) => {
 
   // Watch all values
   const values = Form.useWatch([], form);
-  React.useEffect(() => {
+  useEffect(() => {
     form
       .validateFields({
         validateOnly: true,
@@ -40,11 +45,25 @@ const SubmitButton = ({ form }) => {
   );
 };
 
-export default function CreateProperty(){
+const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  
+    
+export default function UpdateProperty(){
   useEffect(()  => { document.body.classList.remove('login-style'); });
-
+  
   const [messageApi, contextHolder] = message.useMessage();
 
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
+  const [fileList, setFileList] = useState([]);
+  
   const [data, setData] = useState({
     name: "",
     price: "",
@@ -60,6 +79,71 @@ export default function CreateProperty(){
     imgUrl: ""
   });
 
+  const { id } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/property/${id}`)
+      .then((response) => {
+        // console.log('in useEffect get', response);
+
+        setData((prevData) => ({
+          ...prevData,
+          name: response.data.name,
+          price: response.data.price,
+          bedroom: response.data.bedroom,
+          bathroom: response.data.bathroom,
+          space: response.data.space,
+          address: response.data.address,
+          city: response.data.city,
+          stateProvince: response.data.stateProvince,
+          postalCode: response.data.postalCode,
+          commenceDate: response.data.commenceDate,
+          status: response.data.status,
+          imgUrl: response.data.imgUrl
+        }));
+
+        setFileList((prevData) => ([{
+          ...prevData,
+          url: response.data.imgUrl
+        }]));
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    // console.log('in useEffect setFieldsValue');
+    form.setFieldsValue({
+      name: data.name,
+      price: data.price,
+      bedroom: data.bedroom,
+      bathroom: data.bathroom,
+      space: data.space,
+      address: data.address,
+      city: data.city,
+      stateProvince: data.stateProvince,
+      postalCode: data.postalCode,
+      // commenceDate: data.commenceDate,
+      status: data.status == 1 ? 'Active' : data.status == 2 ? 'Pending' : data.status == 3 ? 'Sold' : 'Draft',
+      imgUrl: data.imgUrl
+    });
+  }, [data]);
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
+
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  
   function handle(e) {
     const newData = { ...data };
     newData[e.target.id] = e.target.value;
@@ -88,13 +172,13 @@ export default function CreateProperty(){
   function submit() {
 
     messageApi.open({
-      type: 'adding',
-      content: 'Adding...',
+      type: 'updating',
+      content: 'Updating...',
       duration: 0.5
     });
 
     axios
-      .post(`${process.env.REACT_APP_API_URL}/property/addNew`, {
+      .patch(`${process.env.REACT_APP_API_URL}/property/update/${id}`, {
         name: data.name,
         price: data.price,
         bedroom: data.bedroom,
@@ -113,7 +197,7 @@ export default function CreateProperty(){
         setTimeout(() => {
           messageApi.open({
             type: 'success',
-            content: 'Added!',
+            content: 'Updated!',
             duration: 1,
           });
         }, 500);
@@ -143,7 +227,7 @@ export default function CreateProperty(){
     return e?.fileList;
   };
 
-  const [defaultFileList, setDefaultFileList] = useState([]);
+  // const [defaultFileList, setDefaultFileList] = useState([]);
   const [progress, setProgress] = useState(0);
 
   const uploadImage = async options => {
@@ -189,9 +273,11 @@ export default function CreateProperty(){
     }
   };
 
-  const handleOnChange = ({ file, fileList, event }) => {
-    setDefaultFileList(fileList);
-  };
+  // const handleOnChange = ({ file, fileList, event }) => {
+  //   setDefaultFileList(fileList);
+  // };
+
+  const dateFormat = 'YYYY-MM-DD';
 
   const customAntdStyle = { 
     token: 
@@ -222,10 +308,9 @@ export default function CreateProperty(){
             <Content>
               <div className="container-fluid">
                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 className="h3 mb-0 text-gray-800">Add New Property</h1>
+                  <h1 className="h3 mb-0 text-gray-800">Update Property</h1>
                   <a href="/newProperty" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><FontAwesomeIcon color="#FFF" icon={icon({ name: "plus" })}/> Add </a>
                 </div>
-
                 <div
                   style={{
                     padding: 24,
@@ -294,22 +379,36 @@ export default function CreateProperty(){
                           rules={[{ required: true }]}
                           style={{width:'180px', marginLeft:'40px'}}
                           >
-                          <DatePicker id="commenceDate" value={moment(data.commenceDate)} onChange={(e) => handleDateChange(e)}/>
+                            <DatePicker defaultValue={dayjs()} format={dateFormat} />
+                          {/* <DatePicker id="commenceDate" value={moment(data.commenceDate)} onChange={(e) => handleDateChange(e)}/> */}
                         </Form.Item>
                       </div>
 
                       <Form.Item style={{ width: 125 }} name='imgUrl' label="Images" valuePropName="fileList" getValueFromEvent={normFile}>
-                        <Upload
-                          accept="image/*"
-                          customRequest={uploadImage}
-                          onChange={handleOnChange}
-                          listType="picture-card"
-                          defaultFileList={defaultFileList}
-                          className="image-upload-grid"
-                        >
-                        {defaultFileList.length >= 1 ? null : <FontAwesomeIcon icon={icon({ name: "plus" })} />}
-                        </Upload>
-                        {progress > 0 ? <Progress percent={progress} /> : null}
+                        <div>
+                          <Upload
+                            accept="image/*"
+                            customRequest={uploadImage}
+                            onChange={handleChange}
+                            listType="picture-card"
+                            // defaultFileList={defaultFileList}
+                            className="image-upload-grid"
+                            onPreview={handlePreview}
+                            fileList={fileList}
+                          >
+                          {fileList.length >= 1 ? null : <FontAwesomeIcon icon={icon({ name: "plus" })} />}
+                          </Upload>
+                          {progress > 0 ? <Progress percent={progress} /> : null}
+                          <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+                            <img
+                              alt="example"
+                              style={{
+                                width: '100%',
+                              }}
+                              src={previewImage}
+                            />
+                          </Modal>
+                        </div>
                       </Form.Item>
                     </div>
 
@@ -361,7 +460,7 @@ export default function CreateProperty(){
                       >
                         <Select
                           id="status"
-                          defaultValue="4"
+                          // defaultValue="2"
                           style={{ width: 120 }}
                           options={[{ value: '1', label: 'Active' },
                                     { value: '2', label: 'Pending' },
@@ -381,17 +480,17 @@ export default function CreateProperty(){
                     </div>
                   </Form>
                 </div>
-              </div>
-          </Content>
-          <Footer
-            style={{
-              textAlign: 'center',
-            }}
-          >
-            Copyright ©2023 Real Estate Property Inc. All rights reserved.
-          </Footer>
-        </Layout>
+            </div>
+        </Content>
+        <Footer
+          style={{
+            textAlign: 'center',
+          }}
+        >
+          Copyright ©2023 Real Estate Property Inc. All rights reserved.
+        </Footer>
       </Layout>
+    </Layout>
     </ConfigProvider>
   );
 }

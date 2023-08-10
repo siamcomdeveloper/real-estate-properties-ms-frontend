@@ -1,105 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Layout, theme, Button,Table } from 'antd';
-import Navbar from './navbar';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { ConfigProvider, Layout, theme, Button, Table, Dropdown, message, Modal } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import Navbar from "./navbar";
 
+import SidebarBrand from './sidebarbrand';
+import Topbar from './topbar';
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+
+const { confirm } = Modal;
 const { Header, Content, Footer, Sider } = Layout;
 
-const columns = [
-  {
-    title: 'Image',
-    dataIndex: 'image',
-    key: 'image',
-    render:  () => <img style={{width: 40, maxWidth: 40}} src={'https://img.icons8.com/dusk/2x/customer-insight.png'} />
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    sorter: {
-      compare: (a, b) => a.name - b.name,
-    },
-  },
-  {
-    title: 'Realtor ID',
-    dataIndex: 'realtorId',
-  },
-  {
-    title: 'Phone number',
-    dataIndex: 'phone',
-    sorter: {
-      compare: (a, b) => a.phone - b.phone,
-    },
-  },
-  {
-    title: 'Rank',
-    dataIndex: 'rank',
-    sorter: {
-      compare: (a, b) => a.rank - b.rank,
-    },
-  },
-  {
-    title: 'Commission Rate',
-    dataIndex: 'rate',
-    sorter: {
-      compare: (a, b) => a.rate - b.rate,
-    },
-  },
-  {
-    title: 'Total Commission',
-    dataIndex: 'commission',
-    sorter: {
-      compare: (a, b) => a.commission - b.commission,
-    },
-  },
-];
-
-
-const data = [];
-for(let i = 0; i < 30; i++){
-  data.push({
-    key: crypto.randomUUID(),
-    name: 'Joe Black',
-    realtorId: `X203422${i}`,
-    phone: 2373330092,
-    rank: i,
-    rate: 0.02,
-    commission: 679,
-  });
-}
-
-const onChange = (pagination, filters, sorter, extra) => {
-  console.log('params', pagination, filters, sorter, extra);
-};
-
-// const Todo = (props) => (
-//   <tr className="d-flex">
-//     <td className="col-10">{props.todo}</td>
-//     <td className="col-2" style={{ textAlign: 'right' }}>
-//       <button
-//         onClick={() => {
-//           props.editTodo(props.key);
-//         }}
-//       >
-//         Edit
-//       </button>
-//       {'  '}
-//       <button
-//         onClick={() => {
-//           props.deleteTodo(props.keyt);
-//         }}
-//       >
-//         delete
-//       </button>
-//     </td>
-//   </tr>
-// );
-
-
 export default function RealtorDatabase() {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const onSelectChange = (newSelectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const rowSelection = {
@@ -107,95 +27,221 @@ export default function RealtorDatabase() {
     onChange: onSelectChange,
   };
   const hasSelected = selectedRowKeys.length > 0;
-  // const [todos, setTodoList] = useState([]);
-  // useEffect(() => {
-  //   axios
-  //     .get('https://real-estate-properties-ms-backend.onrender.com/activity/')
-  //     .then((response) => {
-  //       setTodoList(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
-
-  // const deleteTodo = (id) => {
-  //   axios
-  //     .delete('https://real-estate-properties-ms-backend.onrender.com/activity/delete/' + id)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     });
-
-  //   setTodoList(todos.filter((el) => el._id !== id));
-  // };
-
-  // const editTodo = (id) => {
-  //   window.location = '/update/' + id;
-  // };
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const [data, setData] = useState([]);
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/realtors/")
+      .then((response) => {
+        const data = [];
+        for (let i = 0; i < response.data.length; ++i) {
+          data.push({
+            key: i.toString(),
+            id: response.data[i]._id,
+            image: response.data[i].imgUrl,
+            name: response.data[i].name,
+            phonenumber: response.data[i].phone_number,
+            rank: response.data[i].rank,
+            commission_rate: response.data[i].commission_rate,
+            commission_amount: response.data[i].commission_amount,
+          });
+          setData(data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const handleDelete = (id) => {
+
+    confirm({
+      icon: <DeleteOutlined />,
+      content: <span>Are you sure you want to remove?</span>,
+      onOk() {
+  
+        messageApi.open({
+          id,
+          type: 'removing',
+          content: 'Removing...',
+          duration: 0.5
+        });
+        
+        axios
+          .delete("http://localhost:5000/realtors/delete/" + id)
+          .then((result) => {
+            console.log(result);
+            setTimeout(() => {
+              messageApi.open({
+                id,
+                type: 'success',
+                content: 'Removed!',
+                duration: 1,
+              });
+            }, 500);
+            setTimeout(function() { window.location = "/realtor"; }, 1000);
+            // window.location.href = "/realtor";
+          })
+          .catch((err) => {
+            console.log(err);
+            setTimeout(() => {
+              messageApi.open({
+                type: 'error',
+                content: 'Error!',
+                duration: 2,
+              });
+            }, 500);
+          });
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  };
+
+  const columns = [
+    {
+      title: "Image",
+      dataIndex: "image",
+      key: "image",
+      render: (text, record) => (
+        <img
+          style={{ width: 40, maxWidth: 40, borderRadius: 50 }}
+          src={record.image}
+        />
+      ),
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      sorter: {
+        compare: (a, b) => a.name - b.name,
+      },
+    },
+    {
+      title: "Phone number",
+      dataIndex: "phonenumber",
+      sorter: {
+        compare: (a, b) => a.phone - b.phone,
+      },
+    },
+    {
+      title: "Rank",
+      dataIndex: "rank",
+      sorter: {
+        compare: (a, b) => a.rank - b.rank,
+      },
+    },
+    {
+      title: "Commission Rate",
+      dataIndex: "commission_rate",
+      sorter: {
+        compare: (a, b) => a.rate - b.rate,
+      },
+    },
+    {
+      title: "Total Commission",
+      dataIndex: "commission_amount",
+      sorter: {
+        compare: (a, b) => a.commission - b.commission,
+      },
+    },
+    {
+      title: "Action",
+      dataIndex: "operation",
+      key: "operation",
+      render: (text, record) => (
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: "1",
+                label: "Edit",
+                icon: <EditOutlined />,
+                onClick: () =>
+                  (window.location.href = `/updateRealtor/${record.id}`),
+              },
+              {
+                key: "2",
+                label: "Remove",
+                danger: true,
+                icon: <DeleteOutlined />,
+                onClick: (e) => handleDelete(record.id),
+              },
+            ],
+          }}
+        >
+          <a className="action-dropdown">...</a>
+        </Dropdown>
+      ),
+    },
+  ];
+  
+  const onChange = (pagination, filters, sorter, extra) => {
+    console.log("params", pagination, filters, sorter, extra);
+  };
+
+  const customAntdStyle = { 
+    token: 
+    { 
+      fontFamily: "'.SFNSDisplay-Regular', sans-serif"
+    } 
+  }
+  
   return (
-    <Layout>
+    <ConfigProvider theme={customAntdStyle}>
+      {contextHolder}
+      <Layout>
       <Sider
         breakpoint="lg"
         collapsedWidth="0"
-        onBreakpoint={(broken) => {
-          // console.log(broken);
-        }}
-        onCollapse={(collapsed, type) => {
-          // console.log(collapsed, type);
-        }}
+        onBreakpoint={(broken) => {}}
+        onCollapse={(collapsed, type) => {}}
       >
-        <div className="demo-logo-vertical" />
-        <Navbar defaultSelectedKeys={['realtor']}/>
-      </Sider>
-      <Layout>
-        <Header style={{display: 'flex'}}>
-          <h5>Realtor List</h5>
-          <Button type="primary" href='/newRealtor' style={{marginLeft: '30px', marginBottom: '20px'}}>Add New</Button>
-        </Header>
-        <Content>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-            }}
-          >
-            <Table rowSelection={rowSelection} columns={columns} dataSource={data} onChange={onChange} />
-            {/* <table className="table">
-              <thead className="thead-light">
-                <tr>
-                  <th>Activity</th>
-                </tr>
-              </thead>
-              <tbody>
-                {todos.map((todo) => {
-                  return (
-                    <Todo
-                      todo={todo.activity}
-                      key={todo._id}
-                      keyt={todo._id}
-                      deleteTodo={deleteTodo}
-                      editTodo={editTodo}
-                    />
-                  );
-                })}
-              </tbody>
-            </table> */}
-          </div>
+        <SidebarBrand />
+          <Navbar defaultSelectedKeys={["realtor"]} />
+        </Sider>
+        <Layout>
+          <Topbar/>       
+          <Content>
+
+            <div className="container-fluid">
+              <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 className="h3 mb-0 text-gray-800">Realtor</h1>
+                <a href="/newRealtor" className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><FontAwesomeIcon color="#FFF" icon={icon({ name: "plus" })}/> Add </a>
+              </div>
+
+              <div
+                style={{
+                  padding: 24,
+                  minHeight: 360,
+                  background: colorBgContainer,
+                }}
+              >
+                <Table
+                  rowSelection={rowSelection}
+                  columns={columns}
+                  dataSource={data}
+                  onChange={onChange}
+                />
+              </div>
+            </div>
         </Content>
         <Footer
           style={{
-            textAlign: 'center',
+            textAlign: "center",
           }}
         >
-          {/* Ant Design ©2023 Created by Ant UED */}
+          Copyright ©2023 Real Estate Property Inc. All rights reserved.
         </Footer>
       </Layout>
     </Layout>
+    </ConfigProvider>
   );
 }
