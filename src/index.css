@@ -43,7 +43,7 @@ a.ant-dropdown-trigger{
 }
 
 .custom-card-style .ant-card-body{
-    width: 300px;
+    /* width: 300px; */
     padding: 0;
     color: #5a5c69;
 }
